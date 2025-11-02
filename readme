@@ -1,0 +1,150 @@
+🧠 MERN + OAuth + Unsplash Image Search
+
+A full-stack MERN application implementing OAuth authentication and Unsplash image search with a multi-select grid, top searches, and per-user search history.
+
+🚀 Project Overview
+
+Objective:
+Build a real-world MERN stack project using MongoDB, Express, React, Node, and OAuth authentication.
+Only authenticated users can search for images fetched from Unsplash API.
+Results appear in a multi-select grid with a dynamic counter.
+
+Additional features include:
+
+Top 5 searches (across all users)
+
+Search history (per user)
+
+OAuth login via Google (and optionally GitHub/Facebook)
+
+MongoDB persistence for all search terms
+
+🗂 Folder Structure
+mern-oauth-unsplash/
+├─ README.md
+├─ .gitignore
+├─ server/
+│  ├─ .env
+│  ├─ package.json
+│  ├─ index.js
+│  ├─ config/
+│  │  └─ passport.js
+│  ├─ models/
+│  │  ├─ User.js
+│  │  └─ Search.js
+│  ├─ routes/
+│  │  ├─ auth.js
+│  │  └─ api.js
+│  └─ middleware/
+│     └─ ensureAuth.js
+└─ client/
+   ├─ .env
+   ├─ package.json
+   ├─ index.html
+   └─ src/
+      ├─ main.jsx
+      └─ App.jsx
+
+⚙️ Tech Stack Used
+Layer	Technology
+Frontend	React (Vite)
+Backend	Node.js, Express.js
+Database	MongoDB (Mongoose)
+Auth	Passport.js (Google OAuth 2.0)
+API	Unsplash Search API
+Session	express-session + connect-mongo
+Styling	Basic CSS in React
+🔑 Environment Variables
+
+Create a file server/.env with:
+
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/mern_oauth_unsplash
+SESSION_SECRET=supersecretstring
+CLIENT_URL=http://localhost:5173
+
+# Unsplash
+UNSPLASH_ACCESS_KEY=YOUR_UNSPLASH_ACCESS_KEY
+
+# Google
+GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET=YOUR_GOOGLE_CLIENT_SECRET
+
+
+Frontend .env (client/.env):
+
+VITE_SERVER_URL=http://localhost:5000
+
+🧩 Setup & Run Locally
+1️⃣ Install dependencies
+cd server
+npm install
+cd ../client
+npm install
+
+2️⃣ Start the backend
+cd server
+npm run dev
+
+3️⃣ Start the frontend
+cd ../client
+npm run dev
+
+
+Visit http://localhost:5173
+ in your browser.
+
+🔐 OAuth Setup (Google Only)
+
+Go to Google Cloud Console
+
+Create a new project → “APIs & Services → Credentials”
+
+Configure OAuth consent screen (External, add your email)
+
+Add credentials:
+
+Authorized JavaScript origins: http://localhost:5173
+
+Authorized redirect URI: http://localhost:5000/auth/google/callback
+
+Copy your Client ID and Client Secret to .env.
+
+🧠 API Endpoints
+GET /api/top-searches
+
+Returns top 5 most frequent search terms.
+
+curl http://localhost:5000/api/top-searches
+
+POST /api/search
+
+Body:
+
+{ "term": "cats" }
+
+
+Stores the term in MongoDB, fetches images from Unsplash.
+
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"term":"cats"}' \
+  http://localhost:5000/api/search
+
+GET /api/history
+
+Fetches the logged-in user’s past searches with timestamps.
+
+curl http://localhost:5000/api/history
+
+🕒 Time Taken & Challenges
+
+Time Taken: ~6–10 hours
+Challenges Faced:
+
+Getting Google OAuth callback working across ports (5173 ↔ 5000)
+
+Managing sessions with credentials: "include" in fetch
+
+Structuring top searches with MongoDB aggregation
+
+Styling and state management for multi-select grid
